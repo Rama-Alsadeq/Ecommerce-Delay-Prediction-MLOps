@@ -1,0 +1,22 @@
+project:
+  name: brazilian-e-commerce-qafza
+
+paths:
+  artifacts: artifacts
+  feature_engineering: artifacts/feature_engineering
+  models: artifacts/models
+  data: data
+
+models:
+  classification: artifacts/models/classification/logistic_regression_smote.joblib
+  regression: artifacts/models/regression/random_forest_exp1.joblib
+preprocessing:
+  scaler: artifacts/feature_engineering/scaler.joblib
+  geo_mean_delay_maps: artifacts/feature_engineering/geo_mean_delay_maps.joblib
+  global_mean_delay: artifacts/feature_engineering/global_mean_delay.joblib
+  feature_names: artifacts/feature_engineering/feature_names.json
+  preprocessing_config: artifacts/feature_engineering/preprocessing_config.json
+  
+targets:
+  classification: delayed
+  regression: delay_days
