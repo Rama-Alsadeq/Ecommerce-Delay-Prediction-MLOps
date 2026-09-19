@@ -23,10 +23,10 @@ jobs:
           pip install -r requirements/dev.txt
 
       - name: Run Ruff
-        run: ruff check .
+        run: ruff check app src tests
 
       - name: Check formatting
-        run: black --check .
+        run: black --check app src tests
 
       - name: Run tests
         run: pytest -q
