@@ -1,3 +1,5 @@
+-r runtime.txt
+
 jupyter==1.1.1
 jupyterlab==4.6.3
 notebook==7.6.2
@@ -9,6 +11,12 @@ openpyxl==3.1.5
 imbalanced-learn==0.14.2
 lightgbm==4.7.0
 xgboost==3.4.1
-pytest
+
+pytest==9.1.1
+httpx==0.28.1
+ruff==0.16.8
+black==26.5.1
+pre-commit==4.6.2
+
 dvc==3.67.1
 great_expectations==1.23.0

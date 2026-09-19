@@ -1,14 +1,11 @@
 from pathlib import Path
 
 from src.features import load_feature_artifacts
-from src.preprocessing import load_scaler
 from src.predictor import load_model
-
+from src.preprocessing import load_scaler
 
 ARTIFACT_DIR = Path("artifacts/feature_engineering")
-MODEL_PATH = Path(
-    "artifacts/models/classification/logistic_regression_smote.joblib"
-)
+MODEL_PATH = Path("artifacts/models/classification/logistic_regression_smote.joblib")
 
 
 print("=" * 70)

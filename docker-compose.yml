@@ -1,5 +1,4 @@
 services:
-
   postgresql:
     image: postgres:17
     container_name: postgresql1
@@ -24,5 +23,40 @@ services:
     depends_on:
       - postgresql
 
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.mlflow
+    container_name: mlflow1
+    environment:
+      MLFLOW_SERVER_ALLOWED_HOSTS: "mlflow:5000,localhost:5000,localhost:*"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgresql
+    volumes:
+      - mlflow_artifacts:/mlflow/artifacts
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri postgresql://postgres:postgres@postgresql:5432/mlflow
+      --artifacts-destination /mlflow/artifacts
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: api1
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mlflow
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+
 volumes:
   postgres_data1:
+  mlflow_artifacts:

@@ -42,38 +42,24 @@ def order_to_dataframe(order: dict) -> pd.DataFrame:
     """Convert one API order into a DataFrame with the final model features."""
     logger.info("Converting single order to DataFrame")
 
-    missing = [
-        feature
-        for feature in FINAL_FEATURES
-        if feature not in order
-    ]
+    missing = [feature for feature in FINAL_FEATURES if feature not in order]
 
     if missing:
-        logger.warning(
-            "Single order is missing required features: %s",
-            missing
-        )
+        logger.warning("Single order is missing required features: %s", missing)
         raise ValueError(f"Missing required features: {missing}")
 
     df = pd.DataFrame(
-        [[order[feature] for feature in FINAL_FEATURES]],
-        columns=FINAL_FEATURES
+        [[order[feature] for feature in FINAL_FEATURES]], columns=FINAL_FEATURES
     )
 
-    logger.info(
-        "Single order converted successfully: shape=%s",
-        df.shape
-    )
+    logger.info("Single order converted successfully: shape=%s", df.shape)
 
     return df
 
 
 def orders_to_dataframe(orders: list[dict]) -> pd.DataFrame:
     """Convert multiple API orders into a DataFrame with the final model features."""
-    logger.info(
-        "Converting batch of orders to DataFrame: count=%d",
-        len(orders)
-    )
+    logger.info("Converting batch of orders to DataFrame: count=%d", len(orders))
 
     if not orders:
         logger.warning("Received an empty orders list")
@@ -87,19 +73,12 @@ def orders_to_dataframe(orders: list[dict]) -> pd.DataFrame:
 
     if missing:
         logger.warning(
-            "Batch contains orders with missing required features: %s",
-            missing
+            "Batch contains orders with missing required features: %s", missing
         )
         raise ValueError(f"Missing required features: {missing}")
 
-    df = pd.DataFrame(
-        orders,
-        columns=FINAL_FEATURES
-    )
+    df = pd.DataFrame(orders, columns=FINAL_FEATURES)
 
-    logger.info(
-        "Batch converted successfully: shape=%s",
-        df.shape
-    )
+    logger.info("Batch converted successfully: shape=%s", df.shape)
 
     return df

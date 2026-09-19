@@ -3,16 +3,13 @@ from pathlib import Path
 import pandas as pd
 
 from src.data import order_to_dataframe
-from src.validation import validate_features
 from src.features import prepare_features
-from src.preprocessing import preprocess_features
 from src.predictor import load_model, predict
-
+from src.preprocessing import preprocess_features
+from src.validation import validate_features
 
 ARTIFACT_DIR = Path("artifacts/feature_engineering")
-MODEL_PATH = Path(
-    "artifacts/models/classification/logistic_regression_smote.joblib"
-)
+MODEL_PATH = Path("artifacts/models/classification/logistic_regression_smote.joblib")
 TEST_FEATURES_PATH = ARTIFACT_DIR / "test_features_raw.csv"
 
 

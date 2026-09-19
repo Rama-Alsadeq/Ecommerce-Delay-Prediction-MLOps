@@ -1,4 +1,5 @@
 import great_expectations as gx
+
 from src.data import FINAL_FEATURES
 
 NON_NEGATIVE_FEATURES = [
@@ -45,35 +46,24 @@ RANGE_FEATURES = {
 
 context = gx.get_context(mode="file")
 
-try:
+if "test_features_quality" in context.suites.all():
     context.suites.delete("test_features_quality")
-except Exception:
-    pass
 
 suite = gx.ExpectationSuite(name="test_features_quality")
 
 for column in FINAL_FEATURES:
-    suite.add_expectation(
-        gx.expectations.ExpectColumnToExist(
-            column=column
-        )
-    )
+    suite.add_expectation(gx.expectations.ExpectColumnToExist(column=column))
 
 for column in FINAL_FEATURES:
     expected_type = "int64" if column in INTEGER_FEATURES else "float64"
     suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToBeOfType(
-            column=column,
-            type_=expected_type
-        )
+        gx.expectations.ExpectColumnValuesToBeOfType(column=column, type_=expected_type)
     )
 
 for column in NON_NEGATIVE_FEATURES:
     suite.add_expectation(
         gx.expectations.ExpectColumnValuesToBeBetween(
-            column=column,
-            min_value=0,
-            strict_min=False
+            column=column, min_value=0, strict_min=False
         )
     )
 
@@ -84,16 +74,12 @@ for column, (min_value, max_value) in RANGE_FEATURES.items():
             min_value=min_value,
             max_value=max_value,
             strict_min=False,
-            strict_max=False
+            strict_max=False,
         )
     )
 
 for column in FINAL_FEATURES:
-    suite.add_expectation(
-        gx.expectations.ExpectColumnValuesToNotBeNull(
-            column=column
-        )
-    )
+    suite.add_expectation(gx.expectations.ExpectColumnValuesToNotBeNull(column=column))
 
 context.suites.add(suite)
 

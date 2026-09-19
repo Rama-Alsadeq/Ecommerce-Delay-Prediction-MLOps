@@ -10,13 +10,23 @@ paths:
 models:
   classification: artifacts/models/classification/logistic_regression_smote.joblib
   regression: artifacts/models/regression/random_forest_exp1.joblib
+
 preprocessing:
   scaler: artifacts/feature_engineering/scaler.joblib
   geo_mean_delay_maps: artifacts/feature_engineering/geo_mean_delay_maps.joblib
   global_mean_delay: artifacts/feature_engineering/global_mean_delay.joblib
   feature_names: artifacts/feature_engineering/feature_names.json
   preprocessing_config: artifacts/feature_engineering/preprocessing_config.json
-  
+
 targets:
   classification: delayed
   regression: delay_days
+
+api:
+  host: 0.0.0.0
+  port: 8000
+
+mlflow:
+  tracking_uri: http://mlflow:5000
+  model_name: Brazilian-E-Commerce-Classifier
+  model_version: "1"

@@ -12,27 +12,20 @@ logger = get_logger(__name__)
 def load_feature_artifacts(artifact_dir):
     artifact_dir = Path(artifact_dir)
 
-    logger.info(
-        "Loading feature artifacts from: %s",
-        artifact_dir
-    )
+    logger.info("Loading feature artifacts from: %s", artifact_dir)
 
     with open(artifact_dir / "feature_names.json", "r", encoding="utf-8") as f:
         feature_names = json.load(f)
 
-    imputation_medians = joblib.load(
-        artifact_dir / "imputation_medians.joblib"
-    )
+    imputation_medians = joblib.load(artifact_dir / "imputation_medians.joblib")
 
-    replacement_values = joblib.load(
-        artifact_dir / "replacement_values.joblib"
-    )
+    replacement_values = joblib.load(artifact_dir / "replacement_values.joblib")
 
     logger.info(
         "Feature artifacts loaded successfully: features=%d, medians=%d, replacements=%d",
         len(feature_names),
         len(imputation_medians),
-        len(replacement_values)
+        len(replacement_values),
     )
 
     return feature_names, imputation_medians, replacement_values
@@ -85,61 +78,42 @@ def apply_feature_rules(df, imputation_medians, replacement_values):
 
     if replacement_count > 0:
         logger.warning(
-            "Feature values replaced using training rules: count=%d",
-            replacement_count
+            "Feature values replaced using training rules: count=%d", replacement_count
         )
 
     if imputation_count > 0:
         logger.warning(
-            "Missing values imputed using training medians: count=%d",
-            imputation_count
+            "Missing values imputed using training medians: count=%d", imputation_count
         )
 
     if replacement_count == 0 and imputation_count == 0:
-        logger.info(
-            "No value replacements or imputations were required"
-        )
+        logger.info("No value replacements or imputations were required")
 
     return df
 
 
 def prepare_features(df, artifact_dir):
-    logger.info(
-        "Preparing features: input_shape=%s",
-        df.shape
-    )
+    logger.info("Preparing features: input_shape=%s", df.shape)
 
-    feature_names, imputation_medians, replacement_values = (
-        load_feature_artifacts(artifact_dir)
+    feature_names, imputation_medians, replacement_values = load_feature_artifacts(
+        artifact_dir
     )
 
     missing_features = [
-        feature
-        for feature in feature_names
-        if feature not in df.columns
+        feature for feature in feature_names if feature not in df.columns
     ]
 
     if missing_features:
         logger.error(
-            "Missing required features during preparation: %s",
-            missing_features
+            "Missing required features during preparation: %s", missing_features
         )
-        raise ValueError(
-            f"Missing required features: {missing_features}"
-        )
+        raise ValueError(f"Missing required features: {missing_features}")
 
-    df = apply_feature_rules(
-        df,
-        imputation_medians,
-        replacement_values
-    )
+    df = apply_feature_rules(df, imputation_medians, replacement_values)
 
     df = df[feature_names].copy()
     df = df.apply(pd.to_numeric, errors="coerce")
 
-    logger.info(
-        "Features prepared successfully: output_shape=%s",
-        df.shape
-    )
+    logger.info("Features prepared successfully: output_shape=%s", df.shape)
 
     return df
