@@ -1,0 +1,6 @@
+customer_lat,customer_lng,item_count,unique_products,seller_count,total_price,min_freight,unique_seller_states,sellers_same_customer_state,unique_category_count,min_weight_g,min_volume_cm3,min_seller_distance_km,total_payment,max_installments,purchase_year,purchase_month,purchase_weekday,purchase_hour,purchase_quarter,approval_year,approval_quarter,approval_month,approval_weekday,approval_day,approval_hour,customer_zip_code_prefix_mean_delay,customer_city_mean_delay,customer_state_mean_delay,seller_city_mean_delay
+-19.4697,-42.5625,1.0,1.0,1.0,46.0,18.42,1.0,0.0,1.0,200.0,4096.0,635.24,64.42,1.0,2018.0,6.0,3.0,8.0,2.0,2018.0,2.0,6.0,3.0,21.0,8.0,-12.3,-12.7,-12.2,-10.2
+-19.4697,-42.5625,1.0,1.0,1.0,46.0,18.42,1.0,0.0,1.0,200.0,4096.0,635.24,64.42,1.0,2018.0,6.0,3.0,8.0,2.0,2018.0,2.0,6.0,3.0,21.0,8.0,-12.3,-12.7,-12.2,-10.2
+-19.4697,-42.5625,1.0,1.0,1.0,46.0,18.42,1.0,0.0,1.0,200.0,4096.0,635.24,64.42,1.0,2018.0,6.0,3.0,8.0,2.0,2018.0,2.0,6.0,3.0,21.0,8.0,-12.3,-12.7,-12.2,-10.2
+-19.4697,-42.5625,1.0,1.0,1.0,46.0,18.42,1.0,0.0,1.0,200.0,4096.0,635.24,64.42,1.0,2018.0,6.0,3.0,8.0,2.0,2018.0,2.0,6.0,3.0,21.0,8.0,-12.3,-12.7,-12.2,-10.2
+-19.4697,-42.5625,1.0,1.0,1.0,46.0,18.42,1.0,0.0,1.0,200.0,4096.0,635.24,64.42,1.0,2018.0,6.0,3.0,8.0,2.0,2018.0,2.0,6.0,3.0,21.0,8.0,-12.3,-12.7,-12.2,-10.2

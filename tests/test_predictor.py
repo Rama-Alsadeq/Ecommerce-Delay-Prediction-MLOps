@@ -6,11 +6,10 @@ from src.features import prepare_features
 from src.predictor import load_model, predict, predict_batch
 from src.preprocessing import preprocess_features
 
-PROJECT_ROOT = Path("/app")
-ARTIFACT_DIR = PROJECT_ROOT / "artifacts/feature_engineering"
-MODEL_PATH = (
-    PROJECT_ROOT / "artifacts/models/classification/logistic_regression_smote.joblib"
-)
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+FIXTURE_DIR = PROJECT_ROOT / "tests/fixtures"
+ARTIFACT_DIR = FIXTURE_DIR / "feature_engineering"
+MODEL_PATH = FIXTURE_DIR / "logistic_regression.joblib"
 TEST_FEATURES_PATH = ARTIFACT_DIR / "test_features_raw.csv"
 
 

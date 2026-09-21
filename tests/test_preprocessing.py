@@ -6,8 +6,8 @@ from sklearn.preprocessing import MinMaxScaler
 from src.features import prepare_features
 from src.preprocessing import load_scaler, preprocess_features
 
-PROJECT_ROOT = Path("/app")
-ARTIFACT_DIR = PROJECT_ROOT / "artifacts/feature_engineering"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+ARTIFACT_DIR = PROJECT_ROOT / "tests/fixtures/feature_engineering"
 TEST_FEATURES_PATH = ARTIFACT_DIR / "test_features_raw.csv"
 
 
