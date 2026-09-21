@@ -25,5 +25,3 @@ README.md
 Dockerfile
 Dockerfile.mlflow
 docker-compose.yml
-
-requirements/dev.txt

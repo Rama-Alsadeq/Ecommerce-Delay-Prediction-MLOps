@@ -18,6 +18,7 @@ services:
     container_name: python1
     ports:
       - "8888:8888"
+      - "8080:8080"
     volumes:
       - .:/app
     depends_on:

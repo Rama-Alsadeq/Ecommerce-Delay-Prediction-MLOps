@@ -18,5 +18,8 @@ ruff==0.16.8
 black==26.5.1
 pre-commit==4.6.2
 
-dvc==3.67.1
+dvc[gdrive]==3.67.1
+PyDrive2==1.21.3
+asyncssh==2.18.0
+cryptography==43.0.3
 great_expectations==1.23.0

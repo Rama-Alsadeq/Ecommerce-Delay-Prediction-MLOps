@@ -30,3 +30,6 @@ Thumbs.db
 .coverage
 htmlcov/
 /data
+
+client_secret_*.json
+.dvc_gdrive_credentials.json
