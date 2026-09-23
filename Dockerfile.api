@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements/runtime.txt
 COPY app/ app/
 COPY src/ src/
 COPY config/ config/
-COPY artifacts/feature_engineering/ artifacts/feature_engineering/
+COPY artifacts/production/ artifacts/feature_engineering/
 
 EXPOSE 8000
 
