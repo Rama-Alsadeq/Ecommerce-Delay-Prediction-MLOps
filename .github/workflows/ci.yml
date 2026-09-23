@@ -28,9 +28,5 @@ jobs:
       - name: Check formatting
         run: black --check app src tests
 
-      - name: Diagnose test collection
-        run: |
-          python --version
-          pytest --version
-          python -c "import app.main; print('app.main import: OK')"
-          pytest --collect-only -vv
+      - name: Run tests
+        run: pytest -vv -s --timeout=30

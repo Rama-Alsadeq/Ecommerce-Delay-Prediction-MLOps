@@ -13,6 +13,7 @@ lightgbm==4.7.0
 xgboost==3.4.1
 
 pytest==9.1.1
+pytest-timeout==2.4.0
 httpx==0.28.1
 ruff==0.16.8
 black==26.5.1
