@@ -30,3 +30,13 @@ mlflow:
   tracking_uri: http://mlflow:5000
   model_name: Brazilian-E-Commerce-Classifier
   model_version: "1"
+
+monitoring:
+  prediction_log: logs/predictions.jsonl
+  reference_distribution: artifacts/monitoring/reference_prediction_distribution.json
+  min_samples_for_drift: 30
+  thresholds:
+    error_rate: 0.05
+    latency_ms: 500
+    psi_warning: 0.10
+    psi_alert: 0.20

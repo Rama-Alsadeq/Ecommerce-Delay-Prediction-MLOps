@@ -1428,3 +1428,10 @@ The result is a complete ML system that connects data preparation, exploratory a
 ## Training
 
 This project was developed as part of the **Advanced MLOps Training program by Qafza**.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+

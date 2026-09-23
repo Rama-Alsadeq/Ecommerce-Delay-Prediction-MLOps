@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from src.features import prepare_features
 from src.logging_config import get_logger
+from src.monitoring import MonitoringMetrics, load_reference_distribution
 from src.predictor import predict, predict_batch
 from src.preprocessing import preprocess_features
 from src.validation import validate_features
@@ -21,6 +22,7 @@ with open(CONFIG_PATH, "r", encoding="utf-8") as file:
 
 API_CONFIG = CONFIG["api"]
 MLFLOW_CONFIG = CONFIG["mlflow"]
+MONITORING_CONFIG = CONFIG["monitoring"]
 
 MLFLOW_TRACKING_URI = MLFLOW_CONFIG["tracking_uri"]
 MODEL_NAME = MLFLOW_CONFIG["model_name"]
@@ -28,6 +30,12 @@ MODEL_VERSION = str(MLFLOW_CONFIG["model_version"])
 MODEL_URI = f"models:/{MODEL_NAME}/{MODEL_VERSION}"
 
 ARTIFACT_DIR = PROJECT_ROOT / CONFIG["paths"]["feature_engineering"]
+MONITORING_LOG_PATH = PROJECT_ROOT / MONITORING_CONFIG["prediction_log"]
+REFERENCE_DISTRIBUTION_PATH = PROJECT_ROOT / MONITORING_CONFIG["reference_distribution"]
+MONITORING_THRESHOLDS = MONITORING_CONFIG["thresholds"]
+
+monitoring = MonitoringMetrics(MONITORING_LOG_PATH)
+reference_distribution = load_reference_distribution(REFERENCE_DISTRIBUTION_PATH)
 
 logger = get_logger(__name__)
 
@@ -105,6 +113,16 @@ class ModelInfoResponse(BaseModel):
     feature_count: int
 
 
+class MetricsResponse(BaseModel):
+    request_count: int
+    error_count: int
+    error_rate: float
+    avg_latency_ms: float
+    prediction_distribution: dict[str, float]
+    prediction_drift: dict[str, float | str | None]
+    alerts: dict[str, bool]
+
+
 model = None
 
 
@@ -176,6 +194,14 @@ def predict_single(order: OrderRequest):
 
         latency_ms = (time.perf_counter() - start_time) * 1000
 
+        monitoring.record_request(latency_ms)
+        monitoring.record_prediction(
+            result["prediction"],
+            result["probability"],
+            MODEL_VERSION,
+            latency_ms,
+        )
+
         logger.info(
             "Prediction request completed: prediction=%s probability=%s "
             "model_version=%s latency_ms=%.2f",
@@ -193,6 +219,7 @@ def predict_single(order: OrderRequest):
 
     except (ValueError, TypeError) as exc:
         latency_ms = (time.perf_counter() - start_time) * 1000
+        monitoring.record_request(latency_ms, error=True)
 
         logger.warning(
             "Prediction request rejected: error=%s latency_ms=%.2f",
@@ -207,6 +234,7 @@ def predict_single(order: OrderRequest):
 
     except Exception as exc:
         latency_ms = (time.perf_counter() - start_time) * 1000
+        monitoring.record_request(latency_ms, error=True)
 
         logger.exception(
             "Prediction request failed: latency_ms=%.2f",
@@ -242,6 +270,16 @@ def predict_batch_orders(request: BatchOrderRequest):
 
         latency_ms = (time.perf_counter() - start_time) * 1000
 
+        monitoring.record_request(latency_ms)
+
+        for result in results:
+            monitoring.record_prediction(
+                result["prediction"],
+                result["probability"],
+                MODEL_VERSION,
+                latency_ms,
+            )
+
         logger.info(
             "Batch prediction completed: count=%d model_version=%s " "latency_ms=%.2f",
             len(results),
@@ -263,6 +301,7 @@ def predict_batch_orders(request: BatchOrderRequest):
 
     except (ValueError, TypeError) as exc:
         latency_ms = (time.perf_counter() - start_time) * 1000
+        monitoring.record_request(latency_ms, error=True)
 
         logger.warning(
             "Batch prediction request rejected: error=%s latency_ms=%.2f",
@@ -277,6 +316,7 @@ def predict_batch_orders(request: BatchOrderRequest):
 
     except Exception as exc:
         latency_ms = (time.perf_counter() - start_time) * 1000
+        monitoring.record_request(latency_ms, error=True)
 
         logger.exception(
             "Batch prediction failed: latency_ms=%.2f",
@@ -287,3 +327,11 @@ def predict_batch_orders(request: BatchOrderRequest):
             status_code=500,
             detail="Batch prediction failed.",
         ) from exc
+
+
+@app.get("/metrics", response_model=MetricsResponse)
+def metrics():
+    return monitoring.get_metrics(
+        reference_distribution,
+        MONITORING_THRESHOLDS,
+    )

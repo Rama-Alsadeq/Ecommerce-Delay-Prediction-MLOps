@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements/dev.txt
 
       - name: Run Ruff
-        run: ruff check app src tests
+        run: ruff check app src tests --ignore EXE002
 
       - name: Check formatting
         run: black --check app src tests

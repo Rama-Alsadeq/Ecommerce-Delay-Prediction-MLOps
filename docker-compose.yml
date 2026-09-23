@@ -53,6 +53,8 @@ services:
       - "8000:8000"
     depends_on:
       - mlflow
+    volumes:
+      - api_logs:/app/logs
     command: >
       uvicorn app.main:app
       --host 0.0.0.0
@@ -61,3 +63,4 @@ services:
 volumes:
   postgres_data1:
   mlflow_artifacts:
+  api_logs:
