@@ -50,4 +50,4 @@ jobs:
           context: .
           file: ./Dockerfile.api
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/ecommerce-delay-prediction-api:latest
+          tags: ghcr.io/rama-alsadeq/ecommerce-delay-prediction-api:latest
