@@ -1,4 +1,4 @@
-# Ecommerce-Delay-Prediction-MLOps 📦🤖
+# Ecommerce-Delay-Prediction-MLOps 
 
 > **Production-oriented MLOps pipeline for e-commerce delivery delay prediction**
 
